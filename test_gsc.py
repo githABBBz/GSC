@@ -20,54 +20,53 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-__all__ = ['LimitError', 'GoldSilverCopper']
+import unittest
 
-MAX = 9999999999999
-MIN = 0
-
-
-class LimitError(Exception):
-    """"""
+from gsc import LimitError, GoldSilverCopper
 
 
-class GoldSilverCopper:
-    def __init__(self):
-        self.gsc = 0
+class GoldSilverCopperTest(unittest.TestCase):
+    def test_add_limit(self):
+        gsc = GoldSilverCopper()
 
-    def add(self, g, s, c):
-        g *= 10000
-        s *= 100
+        self.assertRaises(LimitError, gsc.add, 1000000000, 0, 0)
 
-        gsc = self.gsc + g + s + c
+    def test_add_g(self):
+        gsc = GoldSilverCopper()
+        gsc.add(0, 100, 0)
 
-        if gsc > MAX:
-            raise LimitError
+        self.assertEqual('1g00s00c', repr(gsc))
 
-        self.gsc = gsc
+    def test_add_s(self):
+        gsc = GoldSilverCopper()
+        gsc.add(0, 0, 100)
 
-    def sub(self, g, s, c):
-        g *= 10000
-        s *= 100
+        self.assertEqual('1s00c', repr(gsc))
 
-        gsc = self.gsc - (g + s + c)
+    def test_add_c(self):
+        gsc = GoldSilverCopper()
 
-        if gsc < MIN:
-            raise LimitError
+        self.assertEqual('0c', repr(gsc))
 
-        self.gsc = gsc
+    def test_sub_limit(self):
+        gsc = GoldSilverCopper()
 
-    def __repr__(self):
-        gsc = str(self.gsc)
+        self.assertRaises(LimitError, gsc.sub, 0, 0, 1)
 
-        g = gsc[:-4]
-        s = gsc[-4:-2]
-        c = gsc[-2:]
+    def test_sub_g(self):
+        gsc = GoldSilverCopper()
+        gsc.add(0, 100, 0)
+        gsc.sub(0, 1, 0)
 
-        if g:
-            g = f'{g}g'
+        self.assertEqual('99s00c', repr(gsc))
 
-        if s:
-            s = f'{s}s'
-        c = f'{c}c'
+    def test_sub_s(self):
+        gsc = GoldSilverCopper()
+        gsc.add(0, 100, 0)
+        gsc.sub(0, 99, 1)
 
-        return f'{g}{s}{c}'
+        self.assertEqual('99c', repr(gsc))
+
+
+if __name__ == '__main__':
+    unittest.main()
