@@ -76,6 +76,7 @@ class GoldSilverCopper:
 
 
 def color():
+    """Coroutine"""
     msg_g = '\033[33mg\033[39m'
     msg_s = '\033[37ms\033[39m'
     msg_c = '\033[31mc\033[39m'
