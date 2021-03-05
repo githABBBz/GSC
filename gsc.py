@@ -20,7 +20,9 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-__all__ = ['LimitError', 'GoldSilverCopper']
+__all__ = ['LimitError', 'GoldSilverCopper', 'color']
+
+from colorama import deinit, init
 
 MAX = 9999999999999
 MIN = 0
@@ -71,3 +73,22 @@ class GoldSilverCopper:
         c = f'{c}c'
 
         return f'{g}{s}{c}'
+
+
+def color():
+    msg_g = '\033[33mg\033[39m'
+    msg_s = '\033[37ms\033[39m'
+    msg_c = '\033[31mc\033[39m'
+
+    init()
+
+    try:
+        while True:
+            gsc = yield
+            gsc = repr(gsc)
+            gsc = gsc.replace('g', msg_g)
+            gsc = gsc.replace('s', msg_s)
+            gsc = gsc.replace('c', msg_c)
+            print(gsc)
+    finally:
+        deinit()
